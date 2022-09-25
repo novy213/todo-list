@@ -1,5 +1,6 @@
 ﻿using Microsoft.Windows.Themes;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -75,8 +76,9 @@ namespace todo_list
         private void DeleteTask_click(object sender, RoutedEventArgs e)
         {
             Button btn = (Button)sender;
-            string? id = btn.Uid;           
-            task.Remove(new Task() { Id = int.Parse(id),Description="sa"});
+            string? id = btn.Uid;
+            int d = int.Parse(id);
+            task.Remove(task.Where(task => task.Id == d).First());
             CurrentProject.ItemsSource = null;
             CurrentProject.ItemsSource = task;                     
         }
