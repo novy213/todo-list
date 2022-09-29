@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -66,7 +67,7 @@ namespace todo_list
         private void Add_click(object sender, RoutedEventArgs e)
         {
             int a = 0;
-            string b = "test2";
+            string b = "Test project";
             projectsCount.Add(new ProjectsCount { Id = a, Name = b });
             project.Add(new Projects { Id = a});          
             ExistingProjects.ItemsSource = null;
@@ -82,20 +83,47 @@ namespace todo_list
             CurrentProject.ItemsSource = null;
             CurrentProject.ItemsSource = task;                     
         }
-
+        int Edit_id;
+        string? Button_id;
+        Button Button;
+        Task editTask;
         private void EditTask_click(object sender, RoutedEventArgs e)
         {
-
+            Button = (Button)sender;
+            Button_id = Button.Uid;
+            Edit_id = int.Parse(Button_id);
+            editTask = task.Find(task => task.Id == Edit_id);
+            EditTask.Text = editTask.Description.ToString();
+            EditTask.Visibility = Visibility.Visible;
+            EditButton.Visibility = Visibility.Visible;
         }
         int c = 0;
-        string b = "test task";
         private void AddTask_click(object sender, RoutedEventArgs e)
-        {                        
-            task.Add(new Task { Id = c, Description = b });
+        {            
+            if (Description.Text.Length > 0)
+            {
+                task.Add(new Task { Id = c, Description = Description.Text });
+                CurrentProject.ItemsSource = null;
+                CurrentProject.ItemsSource = task;
+                c++;
+                Alert.Text = null;
+                Description.Text = null;
+                Description.Focus();
+            }
+            else
+            {
+                Alert.Text = "This field cannot be empty";
+                Description.Focus();
+            }
+        }
+
+        private void EditApply_click(object sender, RoutedEventArgs e)
+        {
+            editTask.Description = EditTask.Text;
             CurrentProject.ItemsSource = null;
             CurrentProject.ItemsSource = task;
-            c++;
-            b += "1";
+            EditTask.Visibility = Visibility.Collapsed;
+            EditButton.Visibility = Visibility.Collapsed;
         }
     }
 }
