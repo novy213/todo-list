@@ -1,21 +1,12 @@
-﻿using Microsoft.Windows.Themes;
+﻿using Microsoft.VisualBasic;
+using Microsoft.Windows.Themes;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using static todo_list.MainWindow;
 
 namespace todo_list
@@ -28,6 +19,8 @@ namespace todo_list
         List<ProjectsCount> projectsCount = new List<ProjectsCount>();
         List<Projects> project= new List<Projects>();
         List<Task> task= new List<Task>();
+
+        int c = 0;
         public MainWindow()
         {            
             InitializeComponent();
@@ -89,6 +82,8 @@ namespace todo_list
         Task editTask;
         private void EditTask_click(object sender, RoutedEventArgs e)
         {
+            AddTaskButton.IsDefault = false;
+            EditButton.IsDefault = true;
             Button = (Button)sender;
             Button_id = Button.Uid;
             Edit_id = int.Parse(Button_id);
@@ -96,8 +91,9 @@ namespace todo_list
             EditTask.Text = editTask.Description.ToString();
             EditTask.Visibility = Visibility.Visible;
             EditButton.Visibility = Visibility.Visible;
-        }
-        int c = 0;
+            EditTask.Focus();
+            EditTask.SelectAll();            
+        }        
         private void AddTask_click(object sender, RoutedEventArgs e)
         {            
             if (Description.Text.Length > 0)
@@ -124,6 +120,15 @@ namespace todo_list
             CurrentProject.ItemsSource = task;
             EditTask.Visibility = Visibility.Collapsed;
             EditButton.Visibility = Visibility.Collapsed;
+            AddTaskButton.IsDefault = true;
+            EditButton.IsDefault = false;
+            Description.Focus();
+        }
+
+        private void Back_click(object sender, RoutedEventArgs e)
+        {
+            MainGrid.Visibility = Visibility.Visible;
+            Project.Visibility = Visibility.Collapsed;
         }
     }
 }
